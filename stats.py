@@ -14,11 +14,10 @@ class Letter:
 
 
 def char_placement_freq(word_list):
-    # alphabet = [Letter(char) for char in string.ascii_lowercase]
+
     alphabet = list(string.ascii_lowercase)
     wordle_placements = [0,1,2,3,4]
     wordle_counts = [0] * 5
-    # wordle_dict = dict(zip(wordle_placements, wordle_counts))
     wordle_dict = {
         0 : 0,
         1 : 0,
@@ -26,15 +25,13 @@ def char_placement_freq(word_list):
         3 : 0,
         4 : 0
     }
-    # wordle_list = [copy.deepcopy(wordle_dict)] * 26
     wordle_list = [copy.deepcopy(wordle_dict) for i in range(26)]
     alphabet_freq = dict(zip(alphabet, wordle_list))
     for word in word_list:
         for pos, letter in enumerate(word):
             alphabet_freq[letter][pos] += 1
             print(alphabet_freq[letter][pos])
-    #counts = [0] * 26
-    #alphabet_freq = dict(zip(alphabet, counts))
+
     with open('data\\alpha_freq_allowed.json', 'w') as f:
         json.dump(alphabet_freq, f)
 
