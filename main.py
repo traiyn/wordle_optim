@@ -1,4 +1,5 @@
 from operator import concat
+from re import L
 from colorama import Fore
 from colorama import Style
 import os
@@ -56,31 +57,38 @@ def print_guesses(_guesses):
     print('-----')
     print('')
 
-def main():
+def play_wordle(_allowed, _solution):
     guesses = []
     solved = False
     i=0
     result = []
+    while(i <= 7 and not solved):
+        guess = str.upper(input('Please enter your next guess:   '))
+        if len(guess) != 5 or guess.lower() not in _allowed:
+            print('Please use a valid 5 letter word.')
+            continue
+        if guess == _solution:
+            solved = True
+            print('You got it!')
+        result = check_guess(guess, _solution)
+        result_color = apply_color(guess, result)
+        guesses.append(result_color)
+        print_guesses(guesses)
+        i += 1
+
+def main():
+
     words_possible = get_word_list(WORD_LIST_DICT['POSSIBLE'])
     words_allowed = get_word_list(WORD_LIST_DICT['ALLOWED'])
     # stats.char_placement_freq(words) # already pulled for possible and allowed
     solution = random.choice(words_possible).upper()
     # stats.calc_freq_score(words_possible)
-    # solution = 'THREE' # had to handle for letter dupes and overwriting GREEN w/ YELLOW
-    while(i <= 7 and not solved):
-        print('Please enter your next guess.')
-        guess = str.upper(input())
-        if len(guess) != 5 or guess.lower() not in words_allowed:
-            print('Please use a valid 5 letter word.')
+    play = True
+    while play:
+        play_wordle(words_allowed, solution)
+        answer = input('Play again? Y/N: ')
+        if answer == 'N':
             continue
-        if guess == solution:
-            solved = True
-            print('You got it!')
-        result = check_guess(guess, solution)
-        result_color = apply_color(guess, result)
-        guesses.append(result_color)
-        print_guesses(guesses)
-        i += 1
     
 
 if __name__ == '__main__':
